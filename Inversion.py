@@ -1,50 +1,47 @@
 import random
 
+
 def Inversion(data):
-#Merge sort algorithm implementation
-	dataLength = len(data)
-	if(dataLength == 1):
-		return (data, 0)
-	return _merge(
-		Inversion(data[:dataLength // 2]),
-		Inversion(data[dataLength // 2:]))
+    dataLength = len(data)
+    if(dataLength == 1):
+        return ((data, 0))
+    return _merge(Inversion(data[:dataLength // 2]), Inversion(data[dataLength // 2:]))
 
-def _merge(left, right):
-#merge two arrays, ordering all elements
-	leftLen = len(left[0])
-	rightLen = len(right[0])
-	result = [None] * (leftLen + rightLen)
-	i , j, k = 0, 0, 0
-	previousInserted = (1 == 1)
-    # False - left(i), True - right(j)
-	inversion = 0
 
-	while(i < leftLen and j < rightLen):
-		if(left[0]][i] < right[0][j]):
-			result[k] = left.data[i]
-			i+=1
-            if(previousInserted):
-                inversion += 1                
-            previousInserted = False
-		else:
-			result[k] = right[0][j]
-			j+=1
-            previousInserted = True
+def _merge(leftTup, rightTup):
+    # merge two arrays, ordering all elements
+    leftLen = len(leftTup[0])
+    rightLen = len(rightTup[0])
+    result = [None] * (leftLen + rightLen)
+    i, j, k = 0, 0, 0
+    inversion = 0
 
-		k+=1
-	
-	result[k:] = left[0][i:] if(i < leftLen) else right[0][j:]
-	return (result, inversion + left.inv + right.inv)
+    while(i < leftLen and j < rightLen):
+        if(leftTup[0][i] < rightTup[0][j]):
+            result[k] = leftTup[0][i]
+            i += 1
+        else:
+            result[k] = rightTup[0][j]
+            j += 1
+            inversion += leftLen - i
+        k += 1
 
-def Inversion():
-    
+    if(i < leftLen):
+        result[k:] = leftTup[0][i:]
+    else:
+        result[k:] = rightTup[0][j:]
+    return (result, inversion + leftTup[1] + rightTup[1])
+
 
 def Main():
+
     print("============== Inversion counter ==================")
-    data = random.sample(range(0, 10), 10)
-    print("Initial data:\n{0}".format(data))
+    file = open("./TestData/DevideAndConcure.txt", "r")
+    data = []
+    for line in file:
+        data.append(int(line))
     print("Result:\n{0}".format(Inversion(data)))
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     Main()
-    

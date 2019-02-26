@@ -11,28 +11,29 @@ namespace scc
 			Console.WriteLine("Strongly connected components");
 
 			System.Console.WriteLine("Loading frm file");
-			var graph = Graph.ReadFromFile(@".//..//TestData//SccTest.txt");
+			var graph = Graph.ReadFromFile(@".//..//TestData//StronglyConnectedComponents.txt");
 			graph.Print("Loaded:");
 
 			System.Console.WriteLine("Reversing");
 			graph.Reverse();
-			graph.ResetIsVited(false);
+			graph.ResetIsVisited(false);
 
 			System.Console.WriteLine("First DFS");
 			var result = graph.GetNodeOrdered();
 			System.Console.WriteLine($"res - {result.order.Count},  {result.clusters.Count}");
 
 			System.Console.WriteLine("Reverse and reset");
-			graph.ResetIsVited(false);
+			graph.ResetIsVisited(false);
+			graph.Reverse();
 			result.order.Reverse();
 
 			System.Console.WriteLine("Second DFS");
 			result = graph.GetNodeOrdered(result.order);
 
 			var sizes = result.clusters.Select(kv => kv.Value).OrderBy(v => v);
-			sizes.Reverse();
+			var rev = sizes.Reverse();
 
-			foreach (var r in sizes.Take(3))
+			foreach (var r in rev.Take(5))
 			{
 				System.Console.WriteLine(r);
 			}

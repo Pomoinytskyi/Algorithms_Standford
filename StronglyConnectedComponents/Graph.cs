@@ -92,9 +92,11 @@ namespace scc
 				}
 
 				Stack<Node> stack = new Stack<Node>();
-				int clusterSize = 1;
+				HashSet<Node> hashSet = new HashSet<Node>();
+				int clusterSize = 0;
 
 				stack.Push(node);
+				hashSet.Add(node);
 
 				while (stack.Any())
 				{
@@ -103,6 +105,7 @@ namespace scc
 					{
 						order.Add(current);
 						stack.Pop();
+						hashSet.Remove(current);
 						clusterSize++;
 					}
 					else
@@ -110,9 +113,10 @@ namespace scc
 						current.IsVisited = true;
 						foreach (Node next in current.Next.Where(n => !n.IsVisited))
 						{
-							if (!stack.Contains(next)) //ToDo: improve performance
+							if (!hashSet.Contains(next))
 							{
 								stack.Push(next);
+								hashSet.Add(next);
 							}
 						}
 					}
@@ -124,7 +128,7 @@ namespace scc
 			return (order, clusters);
 		}
 
-		public void ResetIsVited(bool newValue)
+		public void ResetIsVisited(bool newValue)
 		{
 			foreach (Node node in graph)
 			{
